@@ -91,7 +91,7 @@ export default function CampaignsPage() {
           {filtered.map(c => {
             const actual = (c as any).actual_stats || {};
             const hasActual = actual.open_rate > 0 || actual.revenue_inr > 0;
-            const sim = c.simulation_result || {};
+            const sim = (c.simulation_result as any) || {};
             return (
               <Link key={c.id} href={`/campaigns/${c.id}`}>
                 <div className="xeno-card cursor-pointer hover:shadow-md transition-all group mb-3">
