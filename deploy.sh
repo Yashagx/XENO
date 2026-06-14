@@ -8,17 +8,21 @@
 set -e
 
 EC2_IP="3.87.12.186"
-EC2_USER="ubuntu"
-REMOTE_DIR="/home/ubuntu/xeno-oracle"
+EC2_USER="ec2-user"
+REMOTE_DIR="/home/ec2-user/xeno-oracle"
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # ── Detect PEM key path (Windows-aware) ────────────────────────────────────
 if [ -n "$PEM_KEY" ]; then
   : # Use whatever the caller supplied
-elif [ -f "$HOME/OneDrive/Desktop/Xeno.pem" ]; then
-  PEM_KEY="$HOME/OneDrive/Desktop/Xeno.pem"
+elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+    # Git Bash on Windows
+    PEM_KEY="C:/Users/Win11/OneDrive/Desktop/Xeno.pem"
 elif [ -f "/mnt/c/Users/Win11/OneDrive/Desktop/Xeno.pem" ]; then
-  PEM_KEY="/mnt/c/Users/Win11/OneDrive/Desktop/Xeno.pem"
+    # WSL
+    cp /mnt/c/Users/Win11/OneDrive/Desktop/Xeno.pem /tmp/Xeno.pem
+    chmod 400 /tmp/Xeno.pem
+    PEM_KEY="/tmp/Xeno.pem"
 elif [ -f "$HOME/Documents/xeno-oracle.pem" ]; then
   PEM_KEY="$HOME/Documents/xeno-oracle.pem"
 else
@@ -67,13 +71,13 @@ echo ""
 echo "🐳 Setting up Docker on EC2 and starting containers..."
 ssh -i "$PEM_KEY" -o StrictHostKeyChecking=no "$EC2_USER@$EC2_IP" << 'REMOTE_SCRIPT'
   set -e
-  cd /home/ubuntu/xeno-oracle
+  cd /home/ec2-user/xeno-oracle
 
   # ── Install Docker if missing ────────────────────────────────────────
   if ! command -v docker &>/dev/null; then
     echo "  Installing Docker..."
-    curl -fsSL https://get.docker.com | sh
-    sudo usermod -aG docker ubuntu
+    sudo dnf install -y docker
+    sudo usermod -aG docker ec2-user
     sudo systemctl enable docker
     sudo systemctl start docker
     # Reload group membership for this session
@@ -82,20 +86,21 @@ ssh -i "$PEM_KEY" -o StrictHostKeyChecking=no "$EC2_USER@$EC2_IP" << 'REMOTE_SCR
 
   # ── Install docker compose plugin if missing ─────────────────────────
   if ! docker compose version &>/dev/null 2>&1; then
-    if ! command -v docker-compose &>/dev/null; then
-      echo "  Installing docker-compose..."
-      sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" \
-        -o /usr/local/bin/docker-compose
-      sudo chmod +x /usr/local/bin/docker-compose
-    fi
+    echo "  Installing docker compose CLI plugin..."
+    mkdir -p ~/.docker/cli-plugins/
+    curl -SL https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+    chmod +x ~/.docker/cli-plugins/docker-compose
   fi
 
-  # ── Use 'docker compose' (v2) or 'docker-compose' (v1) ───────────────
-  if docker compose version &>/dev/null 2>&1; then
-    COMPOSE="docker compose"
-  else
-    COMPOSE="docker-compose"
+  # ── Install buildx plugin if missing ─────────────────────────────────
+  if ! docker buildx version &>/dev/null 2>&1; then
+    echo "  Installing docker-buildx CLI plugin..."
+    mkdir -p ~/.docker/cli-plugins/
+    curl -SL https://github.com/docker/buildx/releases/download/v0.17.1/buildx-v0.17.1.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
+    chmod +x ~/.docker/cli-plugins/docker-buildx
   fi
+
+  COMPOSE="docker compose"
   echo "  Using: $COMPOSE"
 
   echo ""
@@ -136,11 +141,11 @@ Requires=docker.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-WorkingDirectory=/home/ubuntu/xeno-oracle
+WorkingDirectory=/home/ec2-user/xeno-oracle
 ExecStart=/bin/bash -c 'docker compose up -d 2>/dev/null || docker-compose up -d'
 ExecStop=/bin/bash -c 'docker compose down 2>/dev/null || docker-compose down'
 TimeoutStartSec=300
-User=ubuntu
+User=ec2-user
 
 [Install]
 WantedBy=multi-user.target

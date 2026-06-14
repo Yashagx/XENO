@@ -42,6 +42,8 @@ export const api = {
   // Auth
   login: (email: string, password: string) =>
     fetchApi('/api/v1/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
+  register: (email: string, name: string, password: string, role?: string) =>
+    fetchApi('/api/v1/auth/register', { method: 'POST', body: JSON.stringify({ email, name, password, role }) }),
   me: () => fetchApi('/api/v1/auth/me'),
 
   // Campaigns
@@ -65,6 +67,21 @@ export const api = {
   },
   getCustomer: (id: string) => fetchApi(`/api/v1/customers/${id}`),
   getCustomerStats: () => fetchApi('/api/v1/customers/stats'),
+  importCustomersCsv: async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    // We cannot use fetchApi directly because it sets 'Content-Type': 'application/json'
+    // which overrides the browser's automatic multipart/form-data boundary generation.
+    const headers = getAuthHeaders();
+    const res = await fetch(`${API_BASE}/api/v1/customers/import-csv`, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+    if (!res.ok) throw new Error('Upload failed');
+    return res.json();
+  },
 
   // Twins
   getTwin: (customerId: string) => fetchApi(`/api/v1/twins/${customerId}`),

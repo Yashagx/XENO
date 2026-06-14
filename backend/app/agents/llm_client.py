@@ -15,7 +15,9 @@ _client: Optional[AsyncGroq] = None
 def get_client() -> AsyncGroq:
     global _client
     if _client is None:
-        _client = AsyncGroq(api_key=settings.GROQ_API_KEY)
+        import os
+        api_key = os.getenv("GROQ_API_KEY", settings.GROQ_API_KEY)
+        _client = AsyncGroq(api_key=api_key)
     return _client
 
 

@@ -428,7 +428,8 @@ async def complete_campaign(campaign_id: str, db: AsyncSession):
     segment = {
         "name": campaign.name or "",
         "customer_count": 0,
-        "customers": []
+        "customers": [],
+        "created_by_email": campaign.created_by_email or "",  # needed for SES notification
     }
     if campaign.segment_id:
         from app.models.campaign import Segment as SegmentModel

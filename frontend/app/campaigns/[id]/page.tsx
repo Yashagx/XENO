@@ -303,7 +303,7 @@ export default function CampaignDetailPage() {
                 onClick={() => setActivePersona(i)}
                 style={{
                   padding: '5px 12px', borderRadius: '9999px', fontSize: '12px', fontWeight: 600,
-                  border: 'none', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s',
+                  cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s',
                   background: activePersona === i ? '#6366f1' : 'var(--bg-surface)',
                   color: activePersona === i ? 'white' : 'var(--text-secondary)',
                   boxShadow: activePersona === i ? '0 2px 8px rgba(99,102,241,0.3)' : '0 1px 3px rgba(0,0,0,0.05)',

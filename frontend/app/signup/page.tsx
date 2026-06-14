@@ -3,44 +3,31 @@ import { useState } from 'react';
 import { api } from '@/lib/api';
 import { setSession, User } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
-import { Brain, Zap } from 'lucide-react';
+import { Brain, UserPlus } from 'lucide-react';
 import Link from 'next/link';
 
-const DEMO_CREDENTIALS = [
-  { label: '⚡ Admin', email: 'admin@xeno.in', password: 'admin123', role: 'admin', color: '#6366f1' },
-  { label: '🎯 Marketer', email: 'marketer@xeno.in', password: 'marketer123', role: 'marketer', color: '#059669' },
-  { label: '👁 Viewer', email: 'viewer@xeno.in', password: 'viewer123', role: 'viewer', color: '#6b7280' },
-];
-
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('marketer');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e?: React.FormEvent, overrideEmail?: string, overridePassword?: string) {
-    if (e) e.preventDefault();
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
     setError('');
     setLoading(true);
-    const loginEmail = overrideEmail || email;
-    const loginPassword = overridePassword || password;
     try {
-      const result = await api.login(loginEmail, loginPassword) as any;
+      const result = await api.register(email, name, password, role) as any;
       setSession(result.access_token, result.user as User);
       router.push('/');
     } catch (err: any) {
-      setError('Invalid credentials. Please try again.');
+      setError(err.message || 'Registration failed. Email may already be in use.');
     } finally {
       setLoading(false);
     }
-  }
-
-  async function handlePill(cred: typeof DEMO_CREDENTIALS[0]) {
-    setEmail(cred.email);
-    setPassword(cred.password);
-    setError('');
-    await handleSubmit(undefined, cred.email, cred.password);
   }
 
   return (
@@ -86,54 +73,43 @@ export default function LoginPage() {
             <Brain size={28} color="white" />
           </div>
           <h1 style={{ color: 'white', fontSize: '1.5rem', fontWeight: 700, margin: 0, letterSpacing: '-0.02em' }}>
-            XENO ORACLE
+            CREATE ACCOUNT
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', margin: '0.25rem 0 0', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-            AI Marketing OS
+            Join Xeno Oracle
           </p>
-        </div>
-
-        {/* Demo pills */}
-        <div style={{ marginBottom: '1.5rem' }}>
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.7rem', textAlign: 'center', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-            Quick Login
-          </p>
-          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-            {DEMO_CREDENTIALS.map(cred => (
-              <button
-                key={cred.role}
-                onClick={() => handlePill(cred)}
-                disabled={loading}
-                style={{
-                  padding: '0.5rem 1rem',
-                  borderRadius: '9999px',
-                  border: `1px solid ${cred.color}40`,
-                  background: `${cred.color}15`,
-                  color: cred.role === 'marketer' ? '#34d399' : cred.role === 'admin' ? '#a5b4fc' : '#9ca3af',
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  transition: 'all 0.2s',
-                  fontFamily: 'inherit',
-                }}
-                onMouseEnter={e => { if (!loading) (e.target as HTMLElement).style.background = `${cred.color}30`; }}
-                onMouseLeave={e => { (e.target as HTMLElement).style.background = `${cred.color}15`; }}
-              >
-                {cred.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-          <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }} />
-          <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.7rem' }}>or sign in manually</span>
-          <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }} />
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem', marginBottom: '0.5rem', fontWeight: 500 }}>
+              Full Name
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="Your Name"
+              required
+              style={{
+                width: '100%',
+                padding: '0.75rem 1rem',
+                background: 'rgba(255,255,255,0.06)',
+                border: error ? '1px solid #f87171' : '1px solid rgba(255,255,255,0.12)',
+                borderRadius: '10px',
+                color: 'white',
+                fontSize: '0.875rem',
+                fontFamily: 'inherit',
+                outline: 'none',
+                transition: 'border-color 0.15s',
+                boxSizing: 'border-box',
+              }}
+              onFocus={e => { e.target.style.borderColor = '#6366f1'; }}
+              onBlur={e => { e.target.style.borderColor = error ? '#f87171' : 'rgba(255,255,255,0.12)'; }}
+            />
+          </div>
+
           <div style={{ marginBottom: '1rem' }}>
             <label style={{ display: 'block', color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem', marginBottom: '0.5rem', fontWeight: 500 }}>
               Email
@@ -162,7 +138,7 @@ export default function LoginPage() {
             />
           </div>
 
-          <div style={{ marginBottom: '1.5rem' }}>
+          <div style={{ marginBottom: '1rem' }}>
             <label style={{ display: 'block', color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem', marginBottom: '0.5rem', fontWeight: 500 }}>
               Password
             </label>
@@ -188,6 +164,33 @@ export default function LoginPage() {
               onFocus={e => { e.target.style.borderColor = '#6366f1'; }}
               onBlur={e => { e.target.style.borderColor = error ? '#f87171' : 'rgba(255,255,255,0.12)'; }}
             />
+          </div>
+
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem', marginBottom: '0.5rem', fontWeight: 500 }}>
+              Role
+            </label>
+            <select
+              value={role}
+              onChange={e => setRole(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '0.75rem 1rem',
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                borderRadius: '10px',
+                color: 'white',
+                fontSize: '0.875rem',
+                fontFamily: 'inherit',
+                outline: 'none',
+                boxSizing: 'border-box',
+                appearance: 'none'
+              }}
+            >
+              <option value="marketer" style={{ background: '#1a1d2e' }}>Marketer</option>
+              <option value="admin" style={{ background: '#1a1d2e' }}>Admin</option>
+              <option value="viewer" style={{ background: '#1a1d2e' }}>Viewer</option>
+            </select>
           </div>
 
           {error && (
@@ -227,25 +230,21 @@ export default function LoginPage() {
             }}
           >
             {loading ? (
-              <><span style={{ display: 'inline-block', width: '14px', height: '14px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />Signing in...</>
+              <><span style={{ display: 'inline-block', width: '14px', height: '14px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />Registering...</>
             ) : (
-              <><Zap size={16} />Sign In</>
+              <><UserPlus size={16} />Create Account</>
             )}
           </button>
         </form>
 
-        {/* Footer */}
         <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', marginBottom: '1rem' }}>
-            Don't have an account?{' '}
-            <Link href="/signup" style={{ color: '#6366f1', textDecoration: 'none', fontWeight: 600 }}>
-              Sign Up
+          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem' }}>
+            Already have an account?{' '}
+            <Link href="/login" style={{ color: '#6366f1', textDecoration: 'none', fontWeight: 600 }}>
+              Sign In
             </Link>
           </p>
         </div>
-        <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: '0.7rem', marginTop: '1.5rem', marginBottom: 0 }}>
-          RFC-001 · Yash Agarwal · Xeno Oracle v2.0
-        </p>
       </div>
 
       <style>{`

@@ -20,6 +20,7 @@ export interface CustomerTwin {
   churn_probability: number;
   purchase_intent_score: number;
   predicted_ltv_90d: number;
+  predicted_next_purchase_days?: number;
   price_sensitivity: number;
   urgency_responsiveness: number;
   social_proof_affinity: number;
