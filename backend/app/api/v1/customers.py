@@ -11,6 +11,8 @@ from datetime import datetime
 from app.database import get_db
 from app.models.customer import Customer, CustomerTwin
 from app.models.order import Order
+from app.api.v1.auth import get_current_user, require_role
+from app.models.auth import User
 
 router = APIRouter()
 
@@ -19,6 +21,7 @@ router = APIRouter()
 async def import_customers_csv(
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("admin"))
 ):
     """
     Admin endpoint: Upload CSV and bulk-insert customers.
@@ -96,7 +99,8 @@ async def list_customers(
     city: Optional[str] = None,
     limit: int = 50,
     offset: int = 0,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("admin", "marketer", "viewer"))
 ):
     query = (
         select(Customer, CustomerTwin)
@@ -145,7 +149,10 @@ async def list_customers(
 
 
 @router.get("/stats")
-async def customer_stats(db: AsyncSession = Depends(get_db)):
+async def customer_stats(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("admin", "marketer", "viewer"))
+):
     total_result = await db.execute(select(func.count(Customer.id)))
     total = total_result.scalar()
 
@@ -169,7 +176,11 @@ async def customer_stats(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/{customer_id}")
-async def get_customer(customer_id: str, db: AsyncSession = Depends(get_db)):
+async def get_customer(
+    customer_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("admin", "marketer", "viewer"))
+):
     result = await db.execute(
         select(Customer, CustomerTwin)
         .join(CustomerTwin, Customer.id == CustomerTwin.customer_id, isouter=True)

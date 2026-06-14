@@ -10,7 +10,7 @@ from app.database import get_db
 from app.models.campaign import Campaign, Segment
 from app.models.message import Message
 from app.agents.orchestrator import run_campaign_pipeline, execute_campaign, complete_campaign
-from app.api.v1.auth import get_current_user
+from app.api.v1.auth import get_current_user, require_role
 from app.models.auth import User
 import asyncio
 
@@ -67,7 +67,7 @@ async def create_campaign(
     request: CreateCampaignRequest,
     background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(require_role("admin", "marketer"))
 ):
     """Create a new campaign and immediately start the agent pipeline."""
     campaign = Campaign(
@@ -106,7 +106,8 @@ async def list_campaigns(
     status: Optional[str] = None,
     limit: int = 20,
     offset: int = 0,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("admin", "marketer", "viewer"))
 ):
     query = select(Campaign).order_by(desc(Campaign.created_at)).offset(offset).limit(limit)
     if status:
@@ -129,7 +130,11 @@ async def list_campaigns(
 
 
 @router.get("/{campaign_id}")
-async def get_campaign(campaign_id: str, db: AsyncSession = Depends(get_db)):
+async def get_campaign(
+    campaign_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("admin", "marketer", "viewer"))
+):
     result = await db.execute(select(Campaign).where(Campaign.id == campaign_id))
     campaign = result.scalar_one_or_none()
     if not campaign:
@@ -142,7 +147,8 @@ async def approve_campaign(
     campaign_id: str,
     request: ApproveCampaignRequest,
     background_tasks: BackgroundTasks,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("admin", "marketer"))
 ):
     """Approve a ready campaign for execution."""
     result = await db.execute(select(Campaign).where(Campaign.id == campaign_id))
@@ -159,7 +165,11 @@ async def approve_campaign(
 
 
 @router.get("/{campaign_id}/stats")
-async def get_campaign_stats(campaign_id: str, db: AsyncSession = Depends(get_db)):
+async def get_campaign_stats(
+    campaign_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("admin", "marketer", "viewer"))
+):
     """Get real-time campaign statistics."""
     result = await db.execute(
         select(Message).where(Message.campaign_id == campaign_id)
@@ -203,7 +213,8 @@ async def get_campaign_stats(campaign_id: str, db: AsyncSession = Depends(get_db
 @router.post("/{campaign_id}/export")
 async def export_campaign(
     campaign_id: str,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("admin", "marketer", "viewer"))
 ):
     """Export campaign report to S3. Returns presigned URL or None if S3 not configured."""
     result = await db.execute(select(Campaign).where(Campaign.id == campaign_id))

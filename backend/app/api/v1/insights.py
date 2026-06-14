@@ -6,6 +6,8 @@ import uuid
 from app.database import get_db
 from app.models.insight import Insight
 from app.models.campaign import Campaign
+from app.api.v1.auth import get_current_user, require_role
+from app.models.auth import User
 
 router = APIRouter()
 
@@ -14,7 +16,8 @@ router = APIRouter()
 async def list_insights(
     limit: int = 20,
     offset: int = 0,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("admin", "marketer", "viewer"))
 ):
     result = await db.execute(
         select(Insight, Campaign)
@@ -40,7 +43,11 @@ async def list_insights(
 
 
 @router.get("/{insight_id}")
-async def get_insight(insight_id: str, db: AsyncSession = Depends(get_db)):
+async def get_insight(
+    insight_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("admin", "marketer", "viewer"))
+):
     result = await db.execute(
         select(Insight).where(Insight.id == insight_id)
     )

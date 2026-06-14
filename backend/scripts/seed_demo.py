@@ -25,7 +25,7 @@ CAMPAIGNS = [
     {
         "name": "Diwali Mega Sale — VIP Customers",
         "intent": "Re-engage VIP customers who haven't purchased in 60+ days with Diwali exclusive offers, 30% off premium electronics",
-        "status": "completed", "days_ago": 45, "channel": "email",
+        "status": "completed", "days_ago": 2.9, "channel": "email",
         "segment_name": "VIP Lapsed Customers", "seg_size": 1240,
         "actual": {"open_rate": 0.47, "click_rate": 0.28, "conversion_rate": 0.14, "roi": 3.8, "revenue_inr": 684000, "total_sent": 1240, "converted": 174},
         "sim":    {"open_rate": {"p50": 0.42, "p10": 0.30, "p90": 0.54}, "click_rate": {"p50": 0.24}, "revenue_inr": {"p50": 580000}, "roi": 3.2, "predicted_open_rate": 0.42, "predicted_click_rate": 0.24, "segment_size": 1240},
@@ -57,7 +57,7 @@ CAMPAIGNS = [
     {
         "name": "Summer Monsoon Clearance — WhatsApp",
         "intent": "Drive clearance sale for fashion category via WhatsApp, target mid-tier customers in Tier-1 cities",
-        "status": "completed", "days_ago": 30, "channel": "whatsapp",
+        "status": "completed", "days_ago": 2.5, "channel": "whatsapp",
         "segment_name": "Fashion Mid-Tier Urban", "seg_size": 3200,
         "actual": {"open_rate": 0.68, "click_rate": 0.42, "conversion_rate": 0.19, "roi": 4.6, "revenue_inr": 1280000, "total_sent": 3200, "converted": 608},
         "sim":    {"open_rate": {"p50": 0.60, "p10": 0.48, "p90": 0.72}, "click_rate": {"p50": 0.38}, "revenue_inr": {"p50": 1050000}, "roi": 4.0, "predicted_open_rate": 0.60, "predicted_click_rate": 0.38, "segment_size": 3200},
@@ -89,7 +89,7 @@ CAMPAIGNS = [
     {
         "name": "Cart Abandonment Recovery — SMS",
         "intent": "Recover abandoned carts from last 7 days with a limited-time 10% discount coupon via SMS",
-        "status": "completed", "days_ago": 14, "channel": "sms",
+        "status": "completed", "days_ago": 2.1, "channel": "sms",
         "segment_name": "Cart Abandoners 7D", "seg_size": 890,
         "actual": {"open_rate": 0.72, "click_rate": 0.34, "conversion_rate": 0.22, "roi": 5.1, "revenue_inr": 412000, "total_sent": 890, "converted": 196},
         "sim":    {"open_rate": {"p50": 0.68, "p10": 0.55, "p90": 0.80}, "click_rate": {"p50": 0.30}, "revenue_inr": {"p50": 360000}, "roi": 4.5, "predicted_open_rate": 0.68, "predicted_click_rate": 0.30, "segment_size": 890},
@@ -121,7 +121,7 @@ CAMPAIGNS = [
     {
         "name": "New User Onboarding Flow — Email",
         "intent": "Welcome new users who signed up in last 30 days, educate on product features, drive first purchase",
-        "status": "completed", "days_ago": 20, "channel": "email",
+        "status": "completed", "days_ago": 1.8, "channel": "email",
         "segment_name": "New Users 30D", "seg_size": 567,
         "actual": {"open_rate": 0.55, "click_rate": 0.31, "conversion_rate": 0.18, "roi": 2.9, "revenue_inr": 198000, "total_sent": 567, "converted": 102},
         "sim":    {"open_rate": {"p50": 0.50, "p10": 0.38, "p90": 0.62}, "click_rate": {"p50": 0.28}, "revenue_inr": {"p50": 175000}, "roi": 2.5, "predicted_open_rate": 0.50, "predicted_click_rate": 0.28, "segment_size": 567},
@@ -153,7 +153,7 @@ CAMPAIGNS = [
     {
         "name": "Churn Prevention — High Risk Customers",
         "intent": "Retain customers with churn probability > 70% by offering personalized win-back incentives via email",
-        "status": "completed", "days_ago": 10, "channel": "email",
+        "status": "completed", "days_ago": 1.4, "channel": "email",
         "segment_name": "High Churn Risk >70%", "seg_size": 421,
         "actual": {"open_rate": 0.38, "click_rate": 0.19, "conversion_rate": 0.09, "roi": 2.1, "revenue_inr": 94000, "total_sent": 421, "converted": 38},
         "sim":    {"open_rate": {"p50": 0.35, "p10": 0.24, "p90": 0.46}, "click_rate": {"p50": 0.16}, "revenue_inr": {"p50": 82000}, "roi": 1.8, "predicted_open_rate": 0.35, "predicted_click_rate": 0.16, "segment_size": 421},
@@ -185,7 +185,7 @@ CAMPAIGNS = [
     {
         "name": "Weekend Flash Sale — Electronics",
         "intent": "48-hour flash sale on electronics for high-spend customers, push via WhatsApp and SMS combo",
-        "status": "completed", "days_ago": 7, "channel": "whatsapp",
+        "status": "completed", "days_ago": 1.0, "channel": "whatsapp",
         "segment_name": "Electronics High-Spend", "seg_size": 1890,
         "actual": {"open_rate": 0.64, "click_rate": 0.39, "conversion_rate": 0.21, "roi": 6.2, "revenue_inr": 2340000, "total_sent": 1890, "converted": 397},
         "sim":    {"open_rate": {"p50": 0.58, "p10": 0.44, "p90": 0.72}, "click_rate": {"p50": 0.35}, "revenue_inr": {"p50": 1980000}, "roi": 5.5, "predicted_open_rate": 0.58, "predicted_click_rate": 0.35, "segment_size": 1890},
@@ -217,7 +217,7 @@ CAMPAIGNS = [
     {
         "name": "Birthday Loyalty Rewards",
         "intent": "Send personalized birthday offers to customers celebrating this month — exclusive 25% off + free gift",
-        "status": "running", "days_ago": 2, "channel": "email",
+        "status": "running", "days_ago": 0.5, "channel": "email",
         "segment_name": "Birthday Month Customers", "seg_size": 234,
         "actual": {"open_rate": 0.81, "click_rate": 0.54, "conversion_rate": 0.31, "roi": 7.4, "revenue_inr": 189000, "total_sent": 234, "converted": 72},
         "sim":    {"open_rate": {"p50": 0.75, "p10": 0.62, "p90": 0.88}, "click_rate": {"p50": 0.48}, "revenue_inr": {"p50": 162000}, "roi": 6.8, "predicted_open_rate": 0.75, "predicted_click_rate": 0.48, "segment_size": 234},
@@ -227,7 +227,7 @@ CAMPAIGNS = [
     {
         "name": "Re-engagement — 90D Inactive",
         "intent": "Win back customers inactive for 90+ days with a 'We miss you' campaign and strong incentive",
-        "status": "approved", "days_ago": 1, "channel": "email",
+        "status": "approved", "days_ago": 0.2, "channel": "email",
         "segment_name": "90D Inactive Customers", "seg_size": 678,
         "actual": {"open_rate": 0.0, "click_rate": 0.0, "conversion_rate": 0.0, "roi": 0.0, "revenue_inr": 0, "total_sent": 0, "converted": 0},
         "sim":    {"open_rate": {"p50": 0.32, "p10": 0.22, "p90": 0.42}, "click_rate": {"p50": 0.15}, "revenue_inr": {"p50": 245000}, "roi": 2.0, "predicted_open_rate": 0.32, "predicted_click_rate": 0.15, "segment_size": 678},

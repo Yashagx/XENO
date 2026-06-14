@@ -9,8 +9,8 @@ router = APIRouter()
 
 
 @router.get("/status")
-async def aws_status(current_user: User = Depends(get_current_user)):
-    """Return AWS service connection status. Available to all authenticated users."""
+async def aws_status(current_user: User = Depends(require_role("admin"))):
+    """Return AWS service connection status. Available to admin only."""
     # S3
     s3_stats = await get_s3_storage_stats()
     s3_info = {

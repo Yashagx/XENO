@@ -6,12 +6,18 @@ import uuid
 
 from app.database import get_db
 from app.models.customer import Customer, CustomerTwin, TwinAuditLog
+from app.api.v1.auth import get_current_user, require_role
+from app.models.auth import User
 
 router = APIRouter()
 
 
 @router.get("/{customer_id}")
-async def get_twin(customer_id: str, db: AsyncSession = Depends(get_db)):
+async def get_twin(
+    customer_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("admin", "marketer", "viewer"))
+):
     result = await db.execute(
         select(CustomerTwin, Customer)
         .join(Customer, Customer.id == CustomerTwin.customer_id)
@@ -25,7 +31,11 @@ async def get_twin(customer_id: str, db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/{customer_id}/history")
-async def get_twin_history(customer_id: str, db: AsyncSession = Depends(get_db)):
+async def get_twin_history(
+    customer_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("admin", "marketer", "viewer"))
+):
     result = await db.execute(
         select(TwinAuditLog)
         .where(TwinAuditLog.customer_id == customer_id)
