@@ -5,19 +5,22 @@ from groq import Groq, AsyncGroq
 from app.config import settings
 from typing import Any, Optional
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
 # Groq async client
 _client: Optional[AsyncGroq] = None
+_cached_api_key: Optional[str] = None
 
 
 def get_client() -> AsyncGroq:
-    global _client
-    if _client is None:
-        import os
-        api_key = os.getenv("GROQ_API_KEY", settings.GROQ_API_KEY)
-        _client = AsyncGroq(api_key=api_key)
+    global _client, _cached_api_key
+    current_key = os.getenv("GROQ_API_KEY") or settings.GROQ_API_KEY
+    # Reset client if API key changed (e.g. loaded from AWS Secrets Manager at startup)
+    if _client is None or _cached_api_key != current_key:
+        _cached_api_key = current_key
+        _client = AsyncGroq(api_key=current_key)
     return _client
 
 
