@@ -357,7 +357,7 @@ export default function LearningConsole() {
                         <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Key Insights</span>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        {selected.content.key_insights.map((insight: string, i: number) => (
+                        {selected.content?.key_insights?.map((insight: string, i: number) => (
                           <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 10px', background: '#f59e0b0a', borderRadius: 8, border: '1px solid #f59e0b18' }}>
                             <span style={{ color: '#f59e0b', fontWeight: 900, fontSize: 11, flexShrink: 0, marginTop: 1 }}>{i + 1}</span>
                             <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>{insight}</p>
@@ -374,7 +374,7 @@ export default function LearningConsole() {
                         <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Recommendations</span>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        {selected.content.next_campaign_recommendations.map((rec: string, i: number) => (
+                        {selected.content?.next_campaign_recommendations?.map((rec: string, i: number) => (
                           <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 10px', background: '#10b9810a', borderRadius: 8, border: '1px solid #10b98118' }}>
                             <span style={{ color: '#10b981', fontWeight: 900, fontSize: 13, flexShrink: 0 }}>✓</span>
                             <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>{rec}</p>
