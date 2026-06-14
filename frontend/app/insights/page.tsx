@@ -350,7 +350,7 @@ export default function LearningConsole() {
 
                 {/* Key Insights + Recommendations */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-                  {selected.content?.key_insights?.length > 0 && (
+                  {(selected.content?.key_insights?.length ?? 0) > 0 && (
                     <div className="xeno-card" style={{ padding: 16 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
                         <Lightbulb size={14} color="#f59e0b" />
@@ -367,7 +367,7 @@ export default function LearningConsole() {
                     </div>
                   )}
 
-                  {selected.content?.next_campaign_recommendations?.length > 0 && (
+                  {(selected.content?.next_campaign_recommendations?.length ?? 0) > 0 && (
                     <div className="xeno-card" style={{ padding: 16 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
                         <Target size={14} color="#10b981" />
