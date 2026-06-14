@@ -1,0 +1,202 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Soothing light palette */
+  --bg-base: #f7f8fc;
+  --bg-surface: #ffffff;
+  --bg-muted: #f0f2f8;
+  --bg-hover: #e8eaf4;
+
+  --border: #e2e5f0;
+  --border-focus: #a5b4fc;
+
+  --text-primary: #1a1d2e;
+  --text-secondary: #5c6080;
+  --text-muted: #9ca3af;
+
+  /* Brand accent */
+  --accent: #6366f1;
+  --accent-light: #eef0fe;
+  --accent-hover: #4f46e5;
+
+  /* Status colors */
+  --emerald: #059669;
+  --emerald-light: #ecfdf5;
+  --amber: #d97706;
+  --amber-light: #fffbeb;
+  --rose: #e11d48;
+  --rose-light: #fff1f2;
+  --sky: #0284c7;
+  --sky-light: #f0f9ff;
+  --violet: #7c3aed;
+  --violet-light: #f5f3ff;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-muted); }
+::-webkit-scrollbar-thumb { background: #c7cbe0; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ===================== CARDS ===================== */
+.xeno-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.xeno-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: #c7cbe0;
+}
+.xeno-card-highlight {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--accent);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.08), var(--shadow-sm);
+}
+.glass {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ===================== GRADIENT TEXT ===================== */
+.gradient-brand {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===================== INPUTS ===================== */
+.xeno-input {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.625rem 0.875rem;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  outline: none;
+}
+.xeno-input::placeholder { color: var(--text-muted); }
+.xeno-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+}
+select.xeno-input { cursor: pointer; }
+
+/* ===================== BUTTONS ===================== */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  font-family: inherit;
+}
+.btn-primary:hover { background: var(--accent-hover); box-shadow: var(--shadow-md); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* ===================== STATUS BADGES ===================== */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+}
+.status-draft { background: #f3f4f6; color: #6b7280; }
+.status-segmenting { background: var(--sky-light); color: var(--sky); }
+.status-strategizing { background: var(--violet-light); color: var(--violet); }
+.status-writing { background: var(--amber-light); color: var(--amber); }
+.status-simulating { background: var(--accent-light); color: var(--accent); }
+.status-ready { background: var(--emerald-light); color: var(--emerald); }
+.status-executing { background: var(--amber-light); color: var(--amber); }
+.status-completed { background: var(--emerald-light); color: var(--emerald); }
+.status-failed { background: var(--rose-light); color: var(--rose); }
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(99,102,241,0.3); }
+  70%  { box-shadow: 0 0 0 6px rgba(99,102,241,0); }
+  100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+}
+
+.animate-slide-in { animation: slideIn 0.25s ease-out; }
+.animate-fade-in  { animation: fadeIn 0.3s ease-out; }
+.animate-pulse-ring { animation: pulse-ring 1.5s ease-out infinite; }
+
+/* ===================== UTILITIES ===================== */
+.line-clamp-1 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; }
+.line-clamp-2 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ===================== SIDEBAR SPECIFIC ===================== */
+.sidebar {
+  width: 240px;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ===================== TABLE ===================== */
+.xeno-table-row {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s ease;
+}
+.xeno-table-row:hover { background: var(--bg-muted); }
+
+/* ===================== TOOLTIP ===================== */
+.xeno-tag {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  background: var(--bg-muted);
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
