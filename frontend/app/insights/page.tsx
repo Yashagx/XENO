@@ -141,9 +141,9 @@ export default function LearningConsole() {
       .finally(() => setLoading(false));
   }, []);
 
-  const totalRevenue = insights.reduce((s, i) => s + (i.content?.actual_stats?.revenue_inr || 0), 0);
-  const avgRoi = insights.length ? (insights.reduce((s, i) => s + (i.content?.actual_stats?.roi || 0), 0) / insights.length) : 0;
-  const avgOpen = insights.length ? (insights.reduce((s, i) => s + (i.content?.actual_stats?.open_rate || 0), 0) / insights.length) : 0;
+  const totalRevenue = insights.reduce((s, i) => s + ((i.content as any)?.actual_stats?.revenue_inr || 0), 0);
+  const avgRoi = insights.length ? (insights.reduce((s, i) => s + ((i.content as any)?.actual_stats?.roi || 0), 0) / insights.length) : 0;
+  const avgOpen = insights.length ? (insights.reduce((s, i) => s + ((i.content as any)?.actual_stats?.open_rate || 0), 0) / insights.length) : 0;
 
   return (
     <div style={{ minHeight: '100vh', padding: '24px', maxWidth: 1200, margin: '0 auto' }}>
@@ -176,7 +176,7 @@ export default function LearningConsole() {
             <div className="xeno-card" style={{ background: 'linear-gradient(135deg,#6366f108,#6366f115)', borderColor: '#6366f130', padding: 16 }}>
               <div style={{ fontSize: 10, color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>Total Campaigns Analysed</div>
               <div style={{ fontSize: 32, fontWeight: 900, color: '#6366f1', lineHeight: 1 }}>{insights.length}</div>
-              <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>across {new Set(insights.map(i => i.content?.channel)).size} channels</div>
+              <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>across {new Set(insights.map(i => (i.content as any)?.channel)).size} channels</div>
             </div>
             <div className="xeno-card" style={{ background: 'linear-gradient(135deg,#10b98108,#10b98115)', borderColor: '#10b98130', padding: 16 }}>
               <div style={{ fontSize: 10, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>Total Revenue Generated</div>
@@ -204,7 +204,7 @@ export default function LearningConsole() {
                 CAMPAIGNS ({insights.length})
               </div>
               {insights.map(ins => {
-                const actual = ins.content?.actual_stats || {};
+                const actual = (ins.content as any)?.actual_stats || {};
                 const isSelected = selected?.id === ins.id;
                 return (
                   <button
@@ -219,7 +219,7 @@ export default function LearningConsole() {
                     }}
                   >
                     <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 4, lineHeight: 1.3 }}>
-                      {ins.campaign_name || ins.content?.campaign_name || 'Campaign'}
+                      {ins.campaign_name || (ins.content as any)?.campaign_name || 'Campaign'}
                     </div>
 
                     {/* Mini metrics */}
@@ -245,14 +245,14 @@ export default function LearningConsole() {
                     </div>
 
                     {/* Trend sparkline */}
-                    {ins.content?.trend_data?.hourly_opens && (
+                    {(ins.content as any)?.trend_data?.hourly_opens && (
                       <div style={{ marginTop: 8, opacity: 0.8 }}>
-                        <Sparkline data={ins.content.trend_data.hourly_opens.slice(6, 22)} color={isSelected ? '#6366f1' : '#94a3b8'} height={28} />
+                        <Sparkline data={(ins.content as any).trend_data.hourly_opens.slice(6, 22)} color={isSelected ? '#6366f1' : '#94a3b8'} height={28} />
                       </div>
                     )}
 
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 6 }}>
-                      <ImpactBadge impact={ins.content?.impact || 'medium'} />
+                      <ImpactBadge impact={(ins.content as any)?.impact || 'medium'} />
                       <span style={{ fontSize: 9, color: 'var(--text-muted)' }}>{timeAgo(ins.generated_at)}</span>
                     </div>
                   </button>

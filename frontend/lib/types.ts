@@ -160,15 +160,16 @@ export interface Insight {
   campaign_name?: string;
   campaign_intent?: string;
   content: {
-    key_insights: string[];
-    prediction_accuracy: Record<string, string>;
-    next_campaign_recommendations: string[];
-    anomalies: string[];
-    executive_summary: string;
+    key_insights?: string[];
+    prediction_accuracy?: Record<string, string>;
+    next_campaign_recommendations?: string[];
+    anomalies?: string[];
+    executive_summary?: string;
     winning_element?: string;
     improvement_area?: string;
     actual_stats?: Record<string, number>;
     predicted_stats?: Record<string, number>;
+    [key: string]: any;
   };
   generated_at?: string;
 }
